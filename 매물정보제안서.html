@@ -554,40 +554,51 @@
 
             let propertiesHtml = '';
             const sections = document.querySelectorAll('#property-container .material-section');
+            console.log(`Found ${sections.length} property sections`); // 디버깅용
             sections.forEach((section, index) => {
                 const id = section.id.replace('property-section-', '');
-                const propContent = document.getElementById(`propContent${id}`).value;
+                const propContentElement = document.getElementById(`propContent${id}`);
+                console.log(`Property ${index + 1} element:`, propContentElement); // 디버깅용
+                const propContent = propContentElement ? propContentElement.value : '';
+                console.log(`Property ${index + 1} content:`, propContent); // 디버깅용
                 const lines = propContent.split('\n').filter(line => line.trim() !== '');
+                console.log(`Property ${index + 1} original lines:`, lines); // 디버깅용
                 
                 let propTitle = `매물명 ${index + 1}.`;
                 
-                // 문의 관련 항목 제거 (맨 아래부터 검색)
+                // 문의 관련 항목 제거 (위에서부터 검색해서 문의 라인부터 아래쪽 모두 제거)
                 const filteredLines = [];
                 let foundInquirySection = false;
                 
-                for (let i = lines.length - 1; i >= 0; i--) {
+                for (let i = 0; i < lines.length; i++) {
                     const line = lines[i].trim();
                     
-                    // 문의 관련 키워드가 포함된 줄부터 아래쪽 모두 제거
-                    if (!foundInquirySection && 
-                        (line.includes('문의') || 
-                         line.includes('연락') || 
-                         line.includes('전화') || 
-                         line.includes('☎') || 
-                         line.includes('📞') || 
-                         line.includes('010-') || 
-                         line.includes('02-') || 
-                         line.includes('070-') || 
-                         line.match(/\d{2,3}-\d{3,4}-\d{4}/))) {
+                    // 더 구체적인 문의 관련 키워드 패턴 확인
+                    const isInquiryLine = 
+                        (line.startsWith('➡️문') && line.includes('의')) ||  // ➡️문  의: 형태
+                        (line.startsWith('문의') && line.includes(':')) ||    // 문의: 형태
+                        (line.includes('연락') && line.includes(':')) ||      // 연락: 형태
+                        (line.includes('전화') && line.includes(':')) ||      // 전화: 형태
+                        line.includes('☎') || 
+                        line.includes('📞') || 
+                        line.includes('010-') || 
+                        line.includes('02-') || 
+                        line.includes('070-') || 
+                        line.match(/\d{2,3}-\d{3,4}-\d{4}/) ||              // 전화번호 패턴
+                        (line.includes('공인중개사') || line.includes('부동산'));  // 부동산 중개업소
+                    
+                    console.log(`Property ${index + 1} line ${i}: "${line}" - isInquiry: ${isInquiryLine}`); // 디버깅용
+                    
+                    if (isInquiryLine) {
                         foundInquirySection = true;
-                        continue; // 이 줄과 아래 줄들은 모두 제외
+                        console.log(`Found inquiry line, stopping at: ${line}`); // 디버깅용
+                        break; // 문의 라인을 찾으면 여기서 중단 (이 라인과 아래쪽 모두 제외)
                     }
                     
-                    if (!foundInquirySection) {
-                        filteredLines.unshift(lines[i]); // 앞쪽에 추가
-                    }
+                    filteredLines.push(lines[i]); // 문의 라인 이전까지만 추가
                 }
                 
+                console.log(`Property ${index + 1} filtered lines:`, filteredLines); // 디버깅용
                 let displayContent = filteredLines.join('<br>');
                 
                 // 두 번째 줄이 ➡️로 시작하는지 확인하고 매물명으로 사용
@@ -595,19 +606,35 @@
                     propTitle = `${filteredLines[1].trim().substring(1).trim()}`;
                     filteredLines.splice(1, 1);
                     displayContent = filteredLines.join('<br>');
+                    console.log(`Property ${index + 1} title updated to: ${propTitle}`); // 디버깅용
                 }
 
-                if (propContent.trim() !== '' && filteredLines.length > 0) {
-                    propertiesHtml += `
-                        <div class="material-section">
-                            <h3 class="section-heading text-lg font-bold">
-                                <span class="pr-2 text-xl font-bold">${index + 1}.</span> ${propTitle}
-                            </h3>
-                            <div class="space-y-2 mt-4 text-gray-700">
-                                <p class="leading-relaxed whitespace-pre-wrap">${displayContent}</p>
+                if (propContent.trim() !== '') {
+                    // 필터링 후에도 내용이 있는 경우만 표시
+                    if (filteredLines.length > 0) {
+                        propertiesHtml += `
+                            <div class="material-section">
+                                <h3 class="section-heading text-lg font-bold">
+                                    <span class="pr-2 text-xl font-bold">${index + 1}.</span> ${propTitle}
+                                </h3>
+                                <div class="space-y-2 mt-4 text-gray-700">
+                                    <p class="leading-relaxed whitespace-pre-wrap">${displayContent}</p>
+                                </div>
                             </div>
-                        </div>
-                    `;
+                        `;
+                    } else {
+                        // 필터링으로 인해 내용이 모두 제거된 경우 알림 표시
+                        propertiesHtml += `
+                            <div class="material-section">
+                                <h3 class="section-heading text-lg font-bold">
+                                    <span class="pr-2 text-xl font-bold">${index + 1}.</span> ${propTitle}
+                                </h3>
+                                <div class="space-y-2 mt-4 text-gray-500 italic">
+                                    <p>문의 정보만 포함되어 제안서에서 제외되었습니다.</p>
+                                </div>
+                            </div>
+                        `;
+                    }
                 }
             });
 
