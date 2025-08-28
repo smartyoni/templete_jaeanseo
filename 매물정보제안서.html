@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>미팅 매물 제안서 🏠</title>
+    <title>미팅 매물 제안서 &#127968;</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap'); /* 제목용 폰트 */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap'); /* 이모지 폰트 */
         :root {
             /* CSS 변수 기본값 설정 */
             --accent-color: #2563EB; /* 기본 파란색 */
@@ -24,7 +25,13 @@
             --header-mix-blend-mode: soft-light;
         }
         * {
-            font-family: 'Noto Sans KR', sans-serif;
+            font-family: 'Noto Sans KR', 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Android Emoji', 'EmojiSymbols', sans-serif;
+        }
+        
+        /* 이모지 전용 CSS */
+        .emoji {
+            font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', 'Android Emoji', 'EmojiSymbols', sans-serif;
+            font-variant-emoji: emoji;
         }
         .material-section {
             break-inside: avoid;
@@ -203,7 +210,7 @@
     <div class="container mx-auto px-4 py-8 max-w-7xl">
         <div class="text-center mb-8 no-print">
             <h1 class="text-4xl font-bold text-gray-800 mb-2">
-                🏠 미팅 매물 제안서
+                <span class="emoji">&#127968;</span> 미팅 매물 제안서
             </h1>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
