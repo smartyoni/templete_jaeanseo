@@ -240,6 +240,10 @@
                         </h3>
                         <div id="property-container" class="space-y-4">
                             </div>
+                        <div class="mt-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-2" for="additionalComments">추가 코멘트</label>
+                            <textarea id="additionalComments" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="예: 해당 매물들은 모두 즉시 입주 가능하며, 협의를 통해 더 나은 조건으로 계약 가능합니다."></textarea>
+                        </div>
                         <button type="button" id="addPropertyButton" class="mt-4 w-full bg-gray-200 text-gray-700 py-2 rounded-md hover:bg-gray-300 transition duration-300 font-semibold">
                             <i class="fas fa-plus mr-1"></i> 매물 추가
                         </button>
@@ -541,9 +545,11 @@
             const clientNameInput = document.getElementById('clientName');
             const meetingDateInput = document.getElementById('meetingDate');
             const clientRequirementsInput = document.getElementById('clientRequirements');
+            const additionalCommentsInput = document.getElementById('additionalComments');
             const clientName = clientNameInput.value || clientNameInput.placeholder || '';
             const meetingDate = meetingDateInput.value;
             const clientRequirements = clientRequirementsInput.value;
+            const additionalComments = additionalCommentsInput.value;
             const documentTitle = '미팅 매물 제안서';
 
             let propertiesHtml = '';
@@ -554,16 +560,44 @@
                 const lines = propContent.split('\n').filter(line => line.trim() !== '');
                 
                 let propTitle = `매물명 ${index + 1}.`;
-                let displayContent = lines.join('<br>');
+                
+                // 문의 관련 항목 제거 (맨 아래부터 검색)
+                const filteredLines = [];
+                let foundInquirySection = false;
+                
+                for (let i = lines.length - 1; i >= 0; i--) {
+                    const line = lines[i].trim();
+                    
+                    // 문의 관련 키워드가 포함된 줄부터 아래쪽 모두 제거
+                    if (!foundInquirySection && 
+                        (line.includes('문의') || 
+                         line.includes('연락') || 
+                         line.includes('전화') || 
+                         line.includes('☎') || 
+                         line.includes('📞') || 
+                         line.includes('010-') || 
+                         line.includes('02-') || 
+                         line.includes('070-') || 
+                         line.match(/\d{2,3}-\d{3,4}-\d{4}/))) {
+                        foundInquirySection = true;
+                        continue; // 이 줄과 아래 줄들은 모두 제외
+                    }
+                    
+                    if (!foundInquirySection) {
+                        filteredLines.unshift(lines[i]); // 앞쪽에 추가
+                    }
+                }
+                
+                let displayContent = filteredLines.join('<br>');
                 
                 // 두 번째 줄이 ➡️로 시작하는지 확인하고 매물명으로 사용
-                if (lines.length > 1 && lines[1].trim().startsWith('➡️')) {
-                    propTitle = `${lines[1].trim().substring(1).trim()}`;
-                    lines.splice(1, 1);
-                    displayContent = lines.join('<br>');
+                if (filteredLines.length > 1 && filteredLines[1].trim().startsWith('➡️')) {
+                    propTitle = `${filteredLines[1].trim().substring(1).trim()}`;
+                    filteredLines.splice(1, 1);
+                    displayContent = filteredLines.join('<br>');
                 }
 
-                if (propContent.trim() !== '') {
+                if (propContent.trim() !== '' && filteredLines.length > 0) {
                     propertiesHtml += `
                         <div class="material-section">
                             <h3 class="section-heading text-lg font-bold">
@@ -627,6 +661,17 @@
                             </p>
                         </div>
                     `}
+                    ${additionalComments ? `
+                        <div class="material-section">
+                            <h2 class="section-heading">
+                                <i class="fas fa-comment-dots"></i>
+                                추가 안내사항
+                            </h2>
+                            <div class="accent-border p-4 bg-yellow-50">
+                                <p class="text-gray-700 leading-relaxed whitespace-pre-wrap">${additionalComments}</p>
+                            </div>
+                        </div>
+                    ` : ''}
                 </div>
             `;
             document.getElementById('documentPreview').innerHTML = generatedHtml;
@@ -655,6 +700,7 @@
             document.getElementById('clientName').addEventListener('input', saveAndGenerate);
             document.getElementById('meetingDate').addEventListener('input', saveAndGenerate);
             document.getElementById('clientRequirements').addEventListener('input', saveAndGenerate);
+            document.getElementById('additionalComments').addEventListener('input', saveAndGenerate);
             
             document.getElementById('addPropertyButton').addEventListener('click', () => {
                 addPropertySection();
@@ -669,6 +715,7 @@
             
             // 새 필드에 대한 placeholder 기능 설정
             setupInputPlaceholdersForElement(document.getElementById('clientRequirements'));
+            setupInputPlaceholdersForElement(document.getElementById('additionalComments'));
         });
         
         // 이미지로 저장하는 함수
