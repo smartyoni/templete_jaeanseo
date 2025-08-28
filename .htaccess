@@ -1,0 +1,24 @@
+# UTF-8 인코딩 강제 설정
+AddDefaultCharset UTF-8
+AddCharset UTF-8 .html .htm .js .css .json
+
+# HTML 파일에 대한 UTF-8 인코딩 명시
+<FilesMatch "\.(html|htm)$">
+    Header set Content-Type "text/html; charset=UTF-8"
+</FilesMatch>
+
+# MIME 타입 설정
+<IfModule mod_mime.c>
+    AddType text/html .html
+    AddType text/css .css
+    AddType application/javascript .js
+    AddType application/json .json
+</IfModule>
+
+# 캐시 설정
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/html "access plus 1 hour"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+</IfModule>
