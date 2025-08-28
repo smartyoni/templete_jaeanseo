@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>미팅 매물 제안서 ✍️</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap'); /* 제목용 폰트 */
+        :root {
+            /* CSS 변수 기본값 설정 */
+            --accent-color: #2563EB; /* 기본 파란색 */
+            --accent-color-light: #BFDBFE;
+            --accent-color-start: #3B82F6;
+            --accent-color-end: #2563EB;
+            --header-bg-image: none; /* 기본 이미지 없음 */
+            --header-bg-position: center center;
+            --header-bg-size: 40% auto;
+            --header-bg-opacity: 0.15;
+            --header-mix-blend-mode: soft-light;
+        }
+        * {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .material-section {
+            break-inside: avoid;
+            page-break-inside: avoid;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background-color: #ffffff; /* 섹션 배경색 */
+            border-radius: 0.75rem; /* 둥근 모서리 */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* 은은한 그림자 */
+        }
+        .input-group {
+            margin-bottom: 1rem;
+        }
+        .section-divider {
+            border-top: 2px solid #e5e7eb;
+            margin: 3rem 0; /* 간격 확대 */
+        }
+        .gradient-header-bg {
+            /* 양식명에 따른 테마 색상 그라디언트 (기본: blue) */
+            background: linear-gradient(135deg, var(--accent-color-start) 0%, var(--accent-color-end) 100%);
+            padding: 2.5rem; /* 패딩 증가 */
+            border-radius: 1rem; /* 더 둥근 모서리 */
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2); /* 텍스트 그림자 */
+            position: relative; /* ::before 가상 요소의 기준점 */
+            overflow: hidden; /* 배경 이미지가 박스 밖으로 나가지 않도록 */
+            /* 인쇄 시에도 색상 유지를 위해 */
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        /* 헤더 배경 이미지 기본 스타일 (가상 요소) */
+        .gradient-header-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: var(--header-bg-image); /* JS에서 설정된 이미지 */
+            background-repeat: no-repeat;
+            background-position: var(--header-bg-position); /* JS에서 설정된 위치 */
+            background-size: var(--header-bg-size); /* JS에서 설정된 크기 */
+            opacity: var(--header-bg-opacity); /* JS에서 설정된 투명도 */
+            z-index: 1; /* 그라디언트 위에 오도록 */
+            mix-blend-mode: var(--header-mix-blend-mode); /* JS에서 설정된 블렌딩 모드 */
+            /* 인쇄 시에도 색상 유지를 위해 */
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        .gradient-header-bg h1, .gradient-header-bg p {
+            position: relative; /* 텍스트가 이미지 위에 오도록 */
+            z-index: 2;
+        }
+        .accent-border {
+            border-left: 5px solid var(--accent-color, #2563EB); /* 테마 색상 경계선 */
+            padding-left: 1rem;
+        }
+        /* H2 및 H3에 동일하게 적용될 섹션 제목 스타일 */
+        .section-heading, .document-output h2, .document-output h3 {
+            font-family: 'Playfair Display', serif !important; /* Playfair Display 폰트 강제 적용 */
+            font-weight: 700 !important; /* 굵게 강제 적용 */
+            color: #1F2937 !important; /* 진한 회색 강제 적용 */
+            display: flex; /* 아이콘과 텍스트 정렬 */
+            align-items: center;
+        }
+        .section-heading { /* input form의 h3과 output h2에 적용 */
+            border-bottom: 3px solid var(--accent-color-light); /* 테마 색상으로 밑줄 */
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .section-heading i {
+            margin-right: 0.75rem;
+            color: var(--accent-color);
+            -webkit-print-color-adjust: exact; /* 인쇄 시 색상 유지 */
+            print-color-adjust: exact;
+        }
+        /* PDF 생성 기능 관련 CSS */
+        @media print {
+            .no-print { display: none !important; }
+            .print-only { display: block !important; }
+            body {
+                -webkit-print-color-adjust: exact; /* Chrome, Safari */
+                print-color-adjust: exact; /* 표준 */
+                font-size: 11pt; /* 인쇄 시 글꼴 크기 약간 축소 */
+                line-height: 1.6;
+                color: #333333;
+                background-color: transparent !important; /* 배경색 투명하게 */
+            }
+            .container {
+                max-width: 100%;
+                padding: 0;
+                margin: 0;
+            }
+            .shadow-lg {
+                box-shadow: none !important; /* 전체 그림자 제거 */
+            }
+            .document-output { /* 보도자료는 Times New Roman 유지 */
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                font-family: 'Times New Roman', serif !important; /* 인쇄 시 문서 전체 폰트 */
+            }
+            /* material-section의 외곽선과 그림자를 인쇄 시에도 유지 */
+            .material-section {
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important; /* 인쇄 시에도 연한 그림자 유지 */
+                border: 1px solid #e5e7eb !important; /* 인쇄 시에도 외곽선 유지 */
+                padding: 1.5rem !important; /* 패딩 유지 */
+                margin-bottom: 1.5rem !important; /* 마진 유지 */
+                background-color: #ffffff !important; /* 배경색 유지 */
+                border-radius: 0.5rem !important; /* 둥근 모서리 유지 */
+                -webkit-print-color-adjust: exact !important; /* 중요: 배경색 유지 */
+                print-color-adjust: exact !important; /* 중요: 배경색 유지 */
+            }
+            /* h2, h3 제목의 폰트와 굵기 유지 */
+            .document-output h2, .document-output h3 {
+                font-family: 'Playfair Display', serif !important;
+                font-weight: 700 !important;
+                color: #1F2937 !important;
+            }
+            .section-heading { /* 인쇄 시 밑줄 및 마진 재조정 */
+                border-bottom: 1px solid #ddd !important; /* 인쇄 시 밑줄 얇게 */
+                padding-bottom: 0.25rem !important;
+                margin-bottom: 1rem !important;
+            }
+            /* 그라디언트 헤더 및 색상 요소의 색상 유지 */
+            .gradient-header-bg {
+                /* 변수 값을 직접 사용하며 !important 강제 */
+                background: linear-gradient(135deg, var(--accent-color-start) 0%, var(--accent-color-end) 100%) !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color: white !important;
+                padding: 1rem !important;
+                border-radius: 0.5rem !important;
+                text-shadow: none !important;
+                border: none !important;
+            }
+            .gradient-header-bg::before { /* 인쇄 시 배경 이미지도 유지 */
+                background-image: var(--header-bg-image) !important; /* 동적으로 설정된 이미지 유지 */
+                background-position: var(--header-bg-position) !important; /* 동적으로 설정된 위치 유지 */
+                background-size: var(--header-bg-size) !important; /* 동적으로 설정된 크기 유지 */
+                opacity: 0.05 !important; /* 인쇄 시 더 희미하게 */
+                mix-blend-mode: normal !important; /* 인쇄 시 블렌딩 모드 제거하여 호환성 개선 */
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .accent-border {
+                border-left-color: var(--accent-color) !important;
+                background-color: #F0F8FF !important; /* 인쇄 시에도 배경색 유지 */
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
+        .print-only { display: none; } /* 기본적으로 숨김 */
+        @page {
+            size: A4;
+            margin: 1in;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <div class="text-center mb-8 no-print">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">
+                <i class="fas fa-building text-green-600 mr-3"></i> 미팅 매물 제안서
+            </h1>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="bg-white rounded-lg shadow-lg p-6 no-print">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                    <i class="fas fa-edit text-blue-500 mr-2"></i>
+                    정보 입력
+                </h2>
+                <form id="documentForm" class="space-y-6">
+                    <div class="border-b border-gray-200 pb-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4 section-heading">
+                            <i class="fas fa-file-invoice"></i> 고객 및 제안 정보
+                        </h3>
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2" for="clientName">고객명*</label>
+                            <input type="text" id="clientName" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="예: 김민준">
+                        </div>
+                        <div class="input-group">
+                            <label class="block text-sm font-medium text-gray-700 mb-2" for="meetingDate">미팅 예정일</label>
+                            <input type="date" id="meetingDate" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+                    
+                    <div class="border-b border-gray-200 pb-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4 section-heading">
+                            <i class="fas fa-building"></i> 매물 정보 (기본 3개, 최대 5개)
+                        </h3>
+                        <div id="property-container" class="space-y-4">
+                            </div>
+                        <button type="button" id="addPropertyButton" class="mt-4 w-full bg-gray-200 text-gray-700 py-2 rounded-md hover:bg-gray-300 transition duration-300 font-semibold">
+                            <i class="fas fa-plus mr-1"></i> 매물 추가
+                        </button>
+                    </div>
+
+                    <div class="flex flex-col space-y-3">
+                        <button type="submit" class="w-full bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition duration-300 font-semibold">
+                            <i class="fas fa-magic mr-2"></i>
+                            제안서 생성하기
+                        </button>
+                        <button type="button" id="clearFormButton" class="w-full bg-gray-300 text-gray-800 py-3 px-6 rounded-md hover:bg-gray-400 transition duration-300 font-semibold">
+                            <i class="fas fa-trash-alt mr-2"></i>
+                            양식 초기화
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="bg-white rounded-lg shadow-lg p-8">
+                <div class="flex items-center justify-between mb-6 no-print">
+                    <h2 class="text-2xl font-bold text-gray-800">
+                        <i class="fas fa-file-alt text-green-600 mr-2"></i>
+                        생성된 매물 제안서
+                    </h2>
+                    <button onclick="window.print()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-300">
+                        <i class="fas fa-print mr-2"></i>
+                        PDF 저장
+                    </button>
+                </div>
+                <div id="documentPreview" class="document-output">
+                    <div class="text-center text-gray-500 py-12">
+                        <i class="fas fa-clipboard-list text-6xl mb-4"></i>
+                        <p class="text-lg">좌측 양식을 작성하고 "제안서 생성하기" 버튼을 클릭하세요</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const formId = 'documentForm';
+        const localStorageKeyPrefix = 'form_generator_';
+        const maxProperties = 5;
+        const minProperties = 3;
+        let propertyCount = 0;
+
+        function createPropertySection(propId, propData = { propContent: '' }) {
+            const newSection = document.createElement('div');
+            newSection.classList.add('material-section', 'p-4', 'border', 'border-gray-200');
+            newSection.id = `property-section-${propId}`;
+            
+            const deleteButtonHtml = propId > minProperties ?
+                `<button type="button" onclick="deletePropertySection(${propId})" class="text-red-500 hover:text-red-700 transition duration-300 absolute top-2 right-2"><i class="fas fa-times"></i></button>` : '';
+
+            newSection.innerHTML = `
+                <div class="relative">
+                    ${deleteButtonHtml}
+                    <h4 class="text-md font-semibold text-gray-700 mb-2">매물 #${propId}</h4>
+                    <div class="input-group">
+                        <label class="block text-xs font-medium text-gray-500 mb-1" for="propContent${propId}">매물 정보</label>
+                        <textarea id="propContent${propId}" rows="6" class="w-full px-2 py-1 border border-gray-300 rounded-md text-sm" placeholder=""
+>${propData.propContent}</textarea>
+                    </div>
+                </div>
+            `;
+            return newSection;
+        }
+
+        function addPropertySection(propData = { propContent: '' }) {
+            if (propertyCount >= maxProperties) {
+                return;
+            }
+            propertyCount++;
+            const container = document.getElementById('property-container');
+            const newSection = createPropertySection(propertyCount, propData);
+            container.appendChild(newSection);
+
+            // Add event listeners for the new inputs
+            document.getElementById(`propContent${propertyCount}`).addEventListener('input', saveAndGenerate);
+
+            // Placeholder logic for new inputs
+            setupInputPlaceholdersForElement(document.getElementById(`propContent${propertyCount}`));
+
+            updateAddButtonVisibility();
+        }
+
+        function deletePropertySection(propId) {
+            const element = document.getElementById(`property-section-${propId}`);
+            if (element) {
+                element.remove();
+                updatePropertyIds();
+                saveAndGenerate();
+            }
+        }
+
+        function updatePropertyIds() {
+            const sections = document.querySelectorAll('#property-container .material-section');
+            propertyCount = sections.length;
+            sections.forEach((section, index) => {
+                const newId = index + 1;
+                section.id = `property-section-${newId}`;
+                section.querySelector('h4').textContent = `매물 #${newId}`;
+                
+                const propContentTextarea = section.querySelector('textarea[id^="propContent"]');
+                if (propContentTextarea) propContentTextarea.id = `propContent${newId}`;
+                const propContentLabel = section.querySelector('label[for^="propContent"]');
+                if (propContentLabel) propContentLabel.setAttribute('for', `propContent${newId}`);
+
+                const deleteButton = section.querySelector('button');
+                if (deleteButton) {
+                    if (newId > minProperties) {
+                        deleteButton.setAttribute('onclick', `deletePropertySection(${newId})`);
+                        deleteButton.classList.remove('hidden');
+                    } else {
+                        deleteButton.classList.add('hidden');
+                    }
+                }
+            });
+            updateAddButtonVisibility();
+        }
+
+        function updateAddButtonVisibility() {
+            const addPropertyButton = document.getElementById('addPropertyButton');
+            if (propertyCount >= maxProperties) {
+                addPropertyButton.classList.add('hidden');
+            } else {
+                addPropertyButton.classList.remove('hidden');
+            }
+        }
+        
+        function saveAndGenerate() {
+            saveFormDataToLocalStorage();
+            generateDocument();
+        }
+        
+        function saveFormDataToLocalStorage() {
+            const formData = {
+                properties: []
+            };
+            const formElements = document.querySelectorAll(`#${formId} textarea, #${formId} input, #${formId} select`);
+            formElements.forEach(element => {
+                if (element.id.startsWith('propContent')) {
+                    const id = element.id.replace('propContent', '');
+                    formData.properties[id-1] = { propContent: element.value };
+                } else if (element.id) {
+                    formData[element.id] = element.value;
+                }
+            });
+            localStorage.setItem(localStorageKeyPrefix + formId, JSON.stringify(formData));
+        }
+        
+        function loadFormDataFromLocalStorage() {
+            const savedData = localStorage.getItem(localStorageKeyPrefix + formId);
+            const container = document.getElementById('property-container');
+            container.innerHTML = '';
+            propertyCount = 0;
+            
+            if (savedData) {
+                const formData = JSON.parse(savedData);
+                if (formData.properties && formData.properties.length > 0) {
+                    formData.properties.forEach(prop => {
+                        addPropertySection(prop);
+                    });
+                } else {
+                    for (let i = 0; i < minProperties; i++) {
+                        addPropertySection();
+                    }
+                }
+                for (const id in formData) {
+                    if (id !== 'properties') {
+                        const element = document.getElementById(id);
+                        if (element) {
+                            if (element.type === 'date' && formData[id]) {
+                                element.valueAsDate = new Date(formData[id]);
+                            } else {
+                                element.value = formData[id];
+                            }
+                        }
+                    }
+                }
+            } else {
+                for (let i = 0; i < minProperties; i++) {
+                    addPropertySection();
+                }
+                const meetingDateElement = document.getElementById('meetingDate');
+                if (meetingDateElement) {
+                    const today = new Date();
+                    meetingDateElement.value = today.toISOString().slice(0,10);
+                }
+            }
+            updatePropertyIds();
+            generateDocument();
+        }
+        
+        function clearForm() {
+            const formElements = document.querySelectorAll(`#${formId} input, #${formId} textarea, #${formId} select`);
+            formElements.forEach(element => {
+                element.value = '';
+            });
+            localStorage.removeItem(localStorageKeyPrefix + formId);
+            
+            // 매물 섹션을 기본 3개로 초기화
+            const container = document.getElementById('property-container');
+            container.innerHTML = '';
+            propertyCount = 0;
+            for (let i = 0; i < minProperties; i++) {
+                addPropertySection();
+            }
+            
+            // 미팅 날짜를 오늘 날짜로 설정
+            const meetingDateElement = document.getElementById('meetingDate');
+            if (meetingDateElement) {
+                const today = new Date();
+                meetingDateElement.value = today.toISOString().slice(0,10);
+            }
+            
+            // 문서 미리보기 초기화
+            document.getElementById('documentPreview').innerHTML = `
+                <div class="text-center text-gray-500 py-12">
+                    <i class="fas fa-clipboard-list text-6xl mb-4"></i>
+                    <p class="text-lg">좌측 양식을 작성하고 "제안서 생성하기" 버튼을 클릭하세요</p>
+                </div>
+            `;
+        }
+        
+        function downloadDataFile() {
+            const formData = {
+                properties: []
+            };
+            const formElements = document.querySelectorAll(`#${formId} textarea, #${formId} input, #${formId} select`);
+            formElements.forEach(element => {
+                if (element.id.startsWith('propContent')) {
+                    const id = element.id.replace('propContent', '');
+                    formData.properties[id-1] = { propContent: element.value };
+                } else if (element.id) {
+                    formData[element.id] = element.value;
+                }
+            });
+            const dataStr = JSON.stringify(formData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const formTitle = '미팅_매물_제안서';
+            const clientName = document.getElementById('clientName').value.replace(/[^a-zA-Z0-9가-힣_]/g, '_') || '고객';
+            a.download = `${formTitle}_${clientName}_${new Date().toISOString().slice(0,10)}.json`; 
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        function uploadDataFile(event) {
+            const file = event.target.files[0];
+            if (!file) { return; }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const loadedData = JSON.parse(e.target.result);
+                    const container = document.getElementById('property-container');
+                    container.innerHTML = '';
+                    propertyCount = 0;
+                    if (loadedData.properties) {
+                        loadedData.properties.forEach(prop => {
+                            addPropertySection(prop);
+                        });
+                    }
+                    for (const id in loadedData) {
+                        if (id !== 'properties') {
+                            const element = document.getElementById(id);
+                            if (element) {
+                                if (element.type === 'date' && loadedData[id]) {
+                                    element.valueAsDate = new Date(loadedData[id]);
+                                } else {
+                                    element.value = loadedData[id];
+                                }
+                            }
+                        }
+                    }
+                    saveAndGenerate();
+                    alert('데이터를 성공적으로 불러왔습니다!');
+                } catch (error) {
+                    alert('파일을 읽는 중 오류가 발생했거나 유효한 JSON 파일이 아닙니다: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+        
+        function generateDocument() {
+            const clientNameInput = document.getElementById('clientName');
+            const meetingDateInput = document.getElementById('meetingDate');
+            const clientName = clientNameInput.value || clientNameInput.placeholder || '';
+            const meetingDate = meetingDateInput.value;
+            const documentTitle = '미팅 매물 제안서';
+
+            let propertiesHtml = '';
+            const sections = document.querySelectorAll('#property-container .material-section');
+            sections.forEach((section, index) => {
+                const id = section.id.replace('property-section-', '');
+                const propContent = document.getElementById(`propContent${id}`).value;
+                const lines = propContent.split('\n').filter(line => line.trim() !== '');
+                
+                let propTitle = `매물명 ${index + 1}.`;
+                let displayContent = lines.join('<br>');
+                
+                // 두 번째 줄이 ➡️로 시작하는지 확인하고 매물명으로 사용
+                if (lines.length > 1 && lines[1].trim().startsWith('➡️')) {
+                    propTitle = `${lines[1].trim().substring(1).trim()}`;
+                    lines.splice(1, 1);
+                    displayContent = lines.join('<br>');
+                }
+
+                if (propContent.trim() !== '') {
+                    propertiesHtml += `
+                        <div class="material-section">
+                            <h3 class="section-heading text-lg font-bold">
+                                <span class="pr-2 text-xl font-bold">${index + 1}.</span> ${propTitle}
+                            </h3>
+                            <div class="space-y-2 mt-4 text-gray-700">
+                                <p class="leading-relaxed whitespace-pre-wrap">${displayContent}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            const root = document.documentElement;
+            let themeColor = '#22c55e';
+            let themeColorLight = '#bbf7d0';
+            let themeColorStart = '#4ade80';
+            let themeColorEnd = '#22c55e';
+            let headerBgImage = "url('https://via.placeholder.com/300x150/4ade80/FFFFFF?text=House')";
+            let headerBgPosition = 'right 5% center';
+            let headerBgSize = '50% auto';
+            let headerBgOpacity = 0.15;
+            let headerMixBlendMode = 'soft-light';
+
+            root.style.setProperty('--accent-color', themeColor);
+            root.style.setProperty('--accent-color-light', themeColorLight);
+            root.style.setProperty('--accent-color-start', themeColorStart);
+            root.style.setProperty('--accent-color-end', themeColorEnd);
+            root.style.setProperty('--header-bg-image', headerBgImage);
+            root.style.setProperty('--header-bg-position', headerBgPosition);
+            root.style.setProperty('--header-bg-size', headerBgSize);
+            root.style.setProperty('--header-bg-opacity', headerBgOpacity);
+            root.style.setProperty('--header-mix-blend-mode', headerMixBlendMode);
+
+            let generatedHtml = `
+                <div class="fade-in">
+                    <div class="gradient-header-bg text-center mb-8">
+                        <h1 class="text-4xl font-bold mb-2">${documentTitle}</h1>
+                        ${clientName ? `<p class="text-xl opacity-90">${clientName} 고객님께</p>` : ''}
+                        ${meetingDate ? `<p class="text-lg mt-2 opacity-80">미팅 예정일: ${new Date(meetingDate).toLocaleDateString('ko-KR')}</p>` : ''}
+                    </div>
+                    ${propertiesHtml || `
+                        <div class="material-section">
+                            <h2 class="section-heading">
+                                <i class="fas fa-info-circle"></i>
+                                매물 정보
+                            </h2>
+                            <p class="text-gray-700 leading-relaxed">
+                                좌측의 매물 정보를 입력하시면 여기에 보고서 내용이 표시됩니다.
+                            </p>
+                        </div>
+                    `}
+                </div>
+            `;
+            document.getElementById('documentPreview').innerHTML = generatedHtml;
+
+            if (window.innerWidth < 1024) {
+                document.getElementById('documentPreview').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        
+        function setupInputPlaceholdersForElement(element) {
+            if (element.placeholder) {
+                element.addEventListener('keydown', (e) => {
+                    if (e.key === 'Tab' && element.value.trim() === '') {
+                        e.preventDefault();
+                        element.value = element.placeholder;
+                        saveAndGenerate();
+                    }
+                });
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFormDataFromLocalStorage();
+            document.getElementById('addPropertyButton').addEventListener('click', () => {
+                addPropertySection();
+                document.getElementById(`propContent${propertyCount}`).focus();
+            });
+            document.getElementById('saveFileButton').addEventListener('click', downloadDataFile);
+            document.getElementById('clearFormButton').addEventListener('click', clearForm);
+            document.getElementById('documentForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                generateDocument();
+            });
+        });
+    </script>
+</body>
+</html>
