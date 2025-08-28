@@ -1,0 +1,35 @@
+# GitHub Pages 설정
+title: "매물정보제안서 템플릿"
+description: "부동산 미팅용 매물 제안서 생성 도구"
+baseurl: ""
+url: "https://smartyoni.github.io/templete_jaeanseo"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+theme: minima
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Exclude from processing
+exclude:
+  - README.md
+  - .claude/
+
+# Include files
+include:
+  - 매물정보제안서.html
+
+# Collections
+collections_dir: ""
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
